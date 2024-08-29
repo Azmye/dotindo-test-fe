@@ -22,7 +22,7 @@
 
    ```bash
     yarn dev or npm run dev
-   ``
+   ```
 
 
 ## 👷 Core library to build this app
