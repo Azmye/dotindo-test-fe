@@ -88,20 +88,17 @@ export const AuthContextProvider = ({
             },
           });
         } else {
-          // If the token is invalid, clear it from storage
           localStorage.removeItem("accessToken");
         }
       }
     } catch (err) {
       console.error("Initialization failed:", err);
-      // Clear any potentially invalid token from storage
       localStorage.removeItem("accessToken");
     }
   };
 
   useEffect(() => {
     initialize();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const login = useCallback(async (email: string, password: string) => {
@@ -126,7 +123,6 @@ export const AuthContextProvider = ({
   const logout = useCallback(() => {
     localStorage.removeItem("accessToken");
     dispatch({ type: "LOGOUT", payload: null });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
