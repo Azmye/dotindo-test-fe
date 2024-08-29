@@ -24,7 +24,7 @@ export default function LoginPage() {
 
   return (
     <div className="h-dvh flex">
-      <div className="w-96 m-auto shadow-md p-2 rounded-md">
+      <div className="w-96 m-auto shadow-md p-2 rounded-md bg-white">
         <h1 className="text-center text-2xl font-semibold">Login</h1>
         <form onSubmit={onSubmit}>
           <div className="border-b p-1 group hover:border-sky-500 focus-within:border-sky-500 mb-2">
@@ -32,7 +32,7 @@ export default function LoginPage() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               type="text"
-              className="w-full outline-none"
+              className="w-full outline-none bg-transparent"
               placeholder="Email"
             />
           </div>
@@ -42,7 +42,7 @@ export default function LoginPage() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               type={showPassword ? "text" : "password"}
-              className="w-full outline-none"
+              className="w-full outline-none bg-transparent"
               placeholder="Email"
             />
           </div>
