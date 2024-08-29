@@ -4,9 +4,11 @@ import Navbar from "../components/navbar";
 
 export default function Layout() {
   return (
-    <main>
+    <>
       <Navbar />
-      <Outlet />
-    </main>
+      <div className="px-72">
+        <Outlet />
+      </div>
+    </>
   );
 }
