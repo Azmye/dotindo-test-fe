@@ -1,5 +1,10 @@
-import React from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function Page() {
-  return <div>Page</div>;
+  const navigate = useNavigate();
+  return (
+    <div>
+      <button onClick={() => navigate("/dashboard")}>button</button>
+    </div>
+  );
 }

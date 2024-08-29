@@ -2,7 +2,6 @@ import { createContext, useCallback, useEffect, useReducer } from "react";
 import { AuthInitialState } from "../types/auth/auth";
 import { User } from "../types/user";
 import { generateToken, verifyToken } from "../utils/jwt";
-import { MockUser } from "../_mock/user";
 
 const initialState: AuthInitialState = {
   isAuthenticated: false,
@@ -21,14 +20,14 @@ type AuthAction =
 type AuthContextType = {
   state: AuthInitialState;
   dispatch: React.Dispatch<AuthAction>;
-  login: (email: string, password: string) => void;
+  login: (email: string, password: string) => Promise<void>;
   logout: () => void;
 };
 
 export const AuthContext = createContext<AuthContextType>({
   state: initialState,
   dispatch: () => undefined,
-  login: () => undefined,
+  login: () => Promise.resolve(),
   logout: () => undefined,
 });
 
@@ -74,12 +73,11 @@ export const AuthContextProvider = ({
   children: React.ReactNode;
 }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
-
-  const initialize = () => {
+  const initialize = async () => {
     try {
       const accessToken = localStorage.getItem("accessToken");
       if (accessToken) {
-        const isValid = verifyToken(accessToken);
+        const isValid = await verifyToken(accessToken);
         if (isValid) {
           dispatch({
             type: "INIT",
@@ -89,25 +87,27 @@ export const AuthContextProvider = ({
               user: isValid as User,
             },
           });
+        } else {
+          // If the token is invalid, clear it from storage
+          localStorage.removeItem("accessToken");
         }
       }
     } catch (err) {
-      console.error(err);
+      console.error("Initialization failed:", err);
+      // Clear any potentially invalid token from storage
+      localStorage.removeItem("accessToken");
     }
   };
 
   useEffect(() => {
     initialize();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const login = useCallback((email: string, password: string) => {
-    const mockUser = {
-      email: MockUser.email,
-      password: MockUser.password,
-    };
-
-    if (email === mockUser.email && password === mockUser.password) {
-      const accessToken = generateToken(MockUser);
+  const login = useCallback(async (email: string, password: string) => {
+    try {
+      const data = { email, password };
+      const accessToken = await generateToken(data);
 
       localStorage.setItem("accessToken", accessToken);
 
@@ -115,15 +115,18 @@ export const AuthContextProvider = ({
         type: "LOGIN",
         payload: {
           accessToken: accessToken,
-          user: MockUser,
+          user: data,
         },
       });
+    } catch (err) {
+      console.log(err);
     }
   }, []);
 
   const logout = useCallback(() => {
     localStorage.removeItem("accessToken");
     dispatch({ type: "LOGOUT", payload: null });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
