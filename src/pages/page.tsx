@@ -1,5 +1,5 @@
 import { useState } from "react";
-import SearchInput from "../components/search-Input";
+import SearchInput from "../components/search-input";
 import useDebounce from "../hooks/useDebounce";
 import { useFetch } from "../hooks/useFetch";
 import { VscLoading } from "react-icons/vsc";
