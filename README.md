@@ -14,7 +14,11 @@
    npm install or yarn
    ```
 
-2. Start the app
+2. Setup your environment
+    change `.env.example` to `.env`
+    and put your jwt key there.
+
+3. Start the app
 
    ```bash
     yarn dev or npm run dev
