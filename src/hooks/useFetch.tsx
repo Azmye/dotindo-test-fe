@@ -11,16 +11,20 @@ export const useFetch = <T = unknown,>(url: string) => {
       try {
         const response = await fetch(url);
 
+        if (response.status === 404) {
+          throw new Error(`Data Not Found`);
+        }
+
         if (!response.ok) {
-          throw new Error(`Error: ${response.statusText}`);
+          throw new Error(`Error: ${response}`);
         }
 
         const result: T = await response.json();
         setData(result);
-      } catch (err) {
-        setError(
-          err instanceof Error ? err : new Error("An unknown error occurred")
-        );
+        setError(null);
+      } catch (err: unknown) {
+        setData(null);
+        setError(err as Error);
       } finally {
         setIsLoading(false);
       }
